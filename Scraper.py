@@ -76,6 +76,70 @@ df_disclosure= zipFileToDf(zip_links, 'FORM_C_DISCLOSURE.tsv')
 df_Issuer= zipFileToDf(zip_links, 'FORM_C_ISSUER_INFORMATION.tsv')
 df_Submission= zipFileToDf(zip_links, 'FORM_C_SUBMISSION.tsv')
 
+df_merged= pd.merge(df_disclosure,df_Issuer, on= 'ACCESSION_NUMBER', how='left')
+df_merged= pd.merge(df_merged,df_Submission, on= 'ACCESSION_NUMBER', how='left')
+
+columns_to_drop= ['STREET1', 'STREET2', 'COMMISSIONCIK', 'COMMISSIONFILENUMBER', 'CRDNUMBER', 'PERIOD']
+df_merged.drop(columns= columns_to_drop, axis=1, inplace=True)
+
+#For renaming columns
+column_mapping = {
+    'ACCESSION_NUMBER': 'accessionNumber',
+    'COMPENSATIONAMOUNT': 'compensationAmount',
+    'FINANCIALINTEREST': 'financialInterest',
+    'SECURITYOFFEREDTYPE': 'securityOfferedType',
+    'SECURITYOFFEREDOTHERDESC': 'securityOfferedOtherDesc',
+    'NOOFSECURITYOFFERED': 'noOfSecurityOffered',
+    'PRICE': 'price',
+    'PRICEDETERMINATIONMETHOD': 'priceDeterminationMethod',
+    'OFFERINGAMOUNT': 'offeringAmount',
+    'OVERSUBSCRIPTIONACCEPTED': 'oversubscriptionAccepted',
+    'OVERSUBSCRIPTIONALLOCATIONTYPE': 'oversubscriptionAllocationType',
+    'DESCOVERSUBSCRIPTION': 'oversubscriptionDesc',
+    'MAXIMUMOFFERINGAMOUNT': 'maximumOfferingAmount',
+    'DEADLINEDATE': 'campaignDeadlineDate',
+    'CURRENTEMPLOYEES': 'currentEmployees',
+    'TOTALASSETMOSTRECENTFISCALYEAR': 'totalAssetMostRecentFiscalYear',
+    'TOTALASSETPRIORFISCALYEAR': 'totalAssetPriorFiscalYear',
+    'CASHEQUIMOSTRECENTFISCALYEAR': 'cashEqMostRecentFiscalYear',
+    'CASHEQUIPRIORFISCALYEAR': 'cashEqPriorFiscalYear',
+    'ACTRECEIVEDRECENTFISCALYEAR': 'accountsReceivedRecentFiscalYear',
+    'ACTRECEIVEDPRIORFISCALYEAR': 'accountsReceivedPriorFiscalYear',
+    'SHORTTERMDEBTMRECENTFISCALYEAR': 'shortTermDebtMRecentFiscalYear',
+    'SHORTTERMDEBTPRIORFISCALYEAR': 'shortTermDebtPriorFiscalYear',
+    'LONGTERMDEBTRECENTFISCALYEAR': 'longTermDebtRecentFiscalYear',
+    'LONGTERMDEBTPRIORFISCALYEAR': 'longTermDebtPriorFiscalYear',
+    'REVENUEMOSTRECENTFISCALYEAR': 'revenueMostRecentFiscalYear',
+    'REVENUEPRIORFISCALYEAR': 'revenuePriorFiscalYear',
+    'COSTGOODSSOLDRECENTFISCALYEAR': 'costGoodsSoldRecentFiscalYear',
+    'COSTGOODSSOLDPRIORFISCALYEAR': 'costGoodsSoldPriorFiscalYear',
+    'TAXPAIDMOSTRECENTFISCALYEAR': 'taxPaidMostRecentFiscalYear',
+    'TAXPAIDPRIORFISCALYEAR': 'taxPaidPriorFiscalYear',
+    'NETINCOMEMOSTRECENTFISCALYEAR': 'netIncomeMostRecentFiscalYear',
+    'NETINCOMEPRIORFISCALYEAR': 'netIncomePriorFiscalYear',
+    'ISAMENDMENT': 'isAmendment',
+    'PROGRESSUPDATE': 'progressUpdate',
+    'NATUREOFAMENDMENT': 'natureOfAmendment',
+    'NAMEOFISSUER': 'issuerName',
+    'LEGALSTATUSFORM': 'legalStatusForm',
+    'LEGALSTATUSOTHERDESC': 'legalStatusOtherDesc',
+    'JURISDICTIONORGANIZATION': 'jurisdictionOrganization',
+    'DATEINCORPORATION': 'dateIncorporation',
+    'CITY': 'city',
+    'STATEORCOUNTRY': 'stateOrCountry',
+    'ZIPCODE': 'zipCode',
+    'ISSUERWEBSITE': 'issuerWebsite',
+    'COMPANYNAME': 'IntermediaryName',
+    'ISCOISSUER': 'isCoIssuer',
+    'SUBMISSION_TYPE': 'submissionType',
+    'FILING_DATE': 'filingDate',
+    'CIK': 'issuerCIK',
+    'FILE_NUMBER': 'fileNumber'
+}
+
+df_merged.rename(columns=column_mapping, inplace=True)
+
+df_merged.to_excel('scrapedCrowdOfferingsData.xlsx')  
 
 
   
