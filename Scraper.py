@@ -83,6 +83,7 @@ columns_to_drop= ['STREET1', 'STREET2', 'COMMISSIONCIK', 'COMMISSIONFILENUMBER',
 df_merged.drop(columns= columns_to_drop, axis=1, inplace=True)
 
 #For renaming columns
+# https://www.sec.gov/dera/data/crowdfund.pdf provides detailed overview of the column descriptions/context names contained in the scraped data
 column_mapping = {
     'ACCESSION_NUMBER': 'accessionNumber',
     'COMPENSATIONAMOUNT': 'compensationAmount',
@@ -92,7 +93,7 @@ column_mapping = {
     'NOOFSECURITYOFFERED': 'noOfSecurityOffered',
     'PRICE': 'price',
     'PRICEDETERMINATIONMETHOD': 'priceDeterminationMethod',
-    'OFFERINGAMOUNT': 'offeringAmount',
+    'OFFERINGAMOUNT': 'targetOfferingAmount',
     'OVERSUBSCRIPTIONACCEPTED': 'oversubscriptionAccepted',
     'OVERSUBSCRIPTIONALLOCATIONTYPE': 'oversubscriptionAllocationType',
     'DESCOVERSUBSCRIPTION': 'oversubscriptionDesc',
@@ -138,8 +139,4 @@ column_mapping = {
 }
 
 df_merged.rename(columns=column_mapping, inplace=True)
-
-df_merged.to_excel('scrapedCrowdOfferingsData.xlsx')  
-
-
-  
+df_merged.to_csv('scrapedCrowdOfferingsData.csv', index=False)  
