@@ -17,7 +17,8 @@ base_url= 'https://www.sec.gov'
 url = 'https://www.sec.gov/dera/data/crowdfunding-offerings-data-sets' #dataset url
 
 # Send an HTTP GET request to the URL
-response = requests.get(url)
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'} # user agent was added in order to avoid 403 error
+response = requests.get(url, headers=headers)
 
 # Parse the HTML content of the page
 soup = BeautifulSoup(response.text, 'html.parser')
@@ -32,7 +33,7 @@ def zipFileToDf(zip_links, fileName):
     
     for zip_link in zip_links:
         # Send an HTTP GET request to download the zip file
-        response = requests.get(zip_link)
+        response = requests.get(zip_link, headers=headers)
         
         # Check if the request was successful
         if response.status_code == 200:
@@ -79,7 +80,7 @@ df_Submission= zipFileToDf(zip_links, 'FORM_C_SUBMISSION.tsv')
 df_merged= pd.merge(df_disclosure,df_Issuer, on= 'ACCESSION_NUMBER', how='left')
 df_merged= pd.merge(df_merged,df_Submission, on= 'ACCESSION_NUMBER', how='left')
 
-columns_to_drop= ['STREET1', 'STREET2', 'COMMISSIONCIK', 'COMMISSIONFILENUMBER', 'CRDNUMBER', 'PERIOD']
+columns_to_drop= ['STREET1', 'STREET2', 'COMMISSIONFILENUMBER', 'CRDNUMBER', 'PERIOD']
 df_merged.drop(columns= columns_to_drop, axis=1, inplace=True)
 
 #For renaming columns
@@ -135,7 +136,8 @@ column_mapping = {
     'SUBMISSION_TYPE': 'submissionType',
     'FILING_DATE': 'filingDate',
     'CIK': 'issuerCIK',
-    'FILE_NUMBER': 'fileNumber'
+    'FILE_NUMBER': 'fileNumber',
+    'COMMISSIONCIK': 'IntermediaryCIK'
 }
 
 df_merged.rename(columns=column_mapping, inplace=True)
