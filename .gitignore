@@ -1,0 +1,5 @@
+#ignore the pickled file containing the classifiers
+stackedClassifier.pkl
+softVotingClassifier.pkl
+hardVotingClassifier.pkl
+rscaler.pkl
